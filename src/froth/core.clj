@@ -11,17 +11,23 @@
 
 (defn- read-word- [s #^BufferedReader reader]
   "Private function. Ignore me"
-  (let [c (char (.read reader))]  
-    (if-not (or (= c \space) (= c \tab) (= c \newline))
-      (read-word- (str s c) reader)
-      s)))
+  (let [i (.read reader)]
+	; check for EOF
+    (if (= i -1)
+      s
+      (let [c (str (char i))]
+	(if-not (seq (re-matches #"\s" c))
+	  (read-word- (str s c) reader)
+	  s)))))
 
 (defn read-word [#^BufferedReader reader]
   "Reads the next word from reader"
   (let [word (read-word- "" reader)]
-    (try
-      (do (to-number word))
-      (catch NumberFormatException _ word))))
+    (if (= "" word)
+      :EOF
+      (try
+	(do (to-number word))
+	(catch NumberFormatException _ word)))))
 
 (defn read-definition- [#^BufferedReader reader words]
   "Private helper to read-definition. Ignore me."

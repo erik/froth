@@ -13,6 +13,7 @@
   (add-word "."     #(println (pop-stack)))
   (add-word ".S"    #(println @stack))
   (add-word "exit"  #(System/exit 0))
+  ; TODO: fixme
   (add-word ":"     #(let [definition (read-definition input)
 			   name (first definition)
 			   code (rest definition)]

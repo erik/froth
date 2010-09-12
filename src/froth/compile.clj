@@ -1,5 +1,6 @@
 (ns froth.compile
-  (:use [froth core dictionary]))
+  (:use [froth core dictionary stack ])
+  (:import [java.io BufferedReader]))
 
 (defn compile-words- [words evals]
   "Private helper to compile-words, ignore me"
@@ -17,6 +18,12 @@
 
 (defn evaluate [#^BufferedReader reader]
   "Evaluates the next word from the reader"
-  (let [word (read-word reader)
-	word-def (get-word word)]
-    ((:fn word-def))))
+  (loop []
+    (let [word (read-word reader)]
+      (if (= (class word) String)
+	((:fn (get-word word)))
+	(when (not= word :EOF)
+	  (push-stack word)))
+      (when (not= word :EOF)
+	(recur)))))
+  

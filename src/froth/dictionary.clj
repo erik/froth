@@ -9,7 +9,7 @@
   "Adds a word to the dictionary"
   ([name fn immediate?]
      (if (dictionary name)
-       (throw (Exception. (str name ": Word already defined!")))
+       (throw (Exception. (str "word already defined: \"" name "\"")))
        (dosync (alter dictionary assoc name {:fn fn :immediate? immediate? }))))
   ([name fn]
      (add-word name fn false)))
@@ -18,12 +18,12 @@
   "Add an alias for a dictionary definition"
   (if-let [word (dictionary old)]
     (add-word new (:fn word) (:immediate? word))
-    (throw (Exception. (str old ": Word not defined!")))))
+    (throw (Exception.  (str "word not defined: \"" old "\"")))))
 
 (defn get-word [word]
   "Returns the value of the requested word"
   (if-let [w (dictionary word)]
     w
-    (throw (Exception. (str word ": Word not defined!")))))
+    (throw (Exception. (str "word not defined: \"" word "\"")))))
 
 
