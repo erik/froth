@@ -15,9 +15,9 @@
 (flush)
 
 (loop [reader (BufferedReader. (StringReader. (read-line)))]
-  ;(try
+  (try
     (evaluate reader)
-   ; (catch Exception e (println (class e) (.getMessage e))))
+    (catch Exception e (println (.getMessage e))))
   (print prompt)
   (flush)
   (recur (BufferedReader. (StringReader. (read-line)))))
