@@ -14,7 +14,7 @@
   (add-word ".S"    #(println @stack))
   (add-word "exit"  #(System/exit 0))
   ; TODO: fixme
-  (add-word ":"     #(let [definition (read-definition @*froth-reader*)
+  (add-word ":"     #(let [definition (read-definition)
 			   name (first definition)
 			   code (rest definition)]
 		       (add-word name (fn []

@@ -16,10 +16,10 @@
   "Takes a vector of words, and evaluates immediate ones (for use with ':')"
   (compile-words- words []))
 
-(defn evaluate [#^BufferedReader reader]
+(defn evaluate []
   "Evaluates the next word from the reader"
   (loop []
-    (let [word (read-word reader)]
+    (let [word (read-word)]
       (if (= (class word) String)
 	((:fn (get-word word)))
 	(when (not= word :EOF)

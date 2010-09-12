@@ -19,7 +19,7 @@
 
 (loop []
   (try
-    (evaluate @*froth-reader*)
+    (evaluate)
     (catch Exception e (println (.getMessage e))))
   (print prompt)
   (flush)

@@ -11,31 +11,31 @@
     (Float. string)
     (Integer. string)))
 
-(defn- read-word- [s #^BufferedReader reader]
+(defn- read-word- []
   "Private function. Ignore me"
   (let [scanner  @*froth-reader*]
     (if (.hasNext scanner)
       (.next scanner)
       "")))
 
-(defn read-word [#^BufferedReader reader]
+(defn read-word []
   "Reads the next word from reader"
-  (let [word (read-word- "" reader)]
+  (let [word (read-word-)]
     (if (or (empty? word) (seq (re-matches #"\s" word)))
       :EOF
       (try
 	(do (to-number word))
 	(catch NumberFormatException _ word)))))
 
-(defn read-definition- [#^BufferedReader reader words]
+(defn read-definition- [words]
   "Private helper to read-definition. Ignore me."
-  (let [word (read-word @*froth-reader*)]
+  (let [word (read-word)]
     (if (or (= word ";") (= word :EOF))
       words
-      (read-definition- reader (conj words word)))))
+      (read-definition- (conj words word)))))
 
-(defn read-definition [#^BufferedReader reader]
+(defn read-definition []
   "Reads the definition of a function (upto and not including the ';')"
-  (read-definition- reader []))
+  (read-definition- []))
     
     
