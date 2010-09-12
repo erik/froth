@@ -3,7 +3,7 @@
 	   [java.util Scanner]
 	   [java.util.regex Pattern]))
 
-(def *froth-version* "0.1.0")
+(def *froth-version* "0.2.0")
 (def *froth-reader* (ref 0))
 
 (defn to-number [string]
