@@ -1,6 +1,7 @@
 (ns froth.core
   (:import [java.io BufferedReader]
-	   [java.util Scanner]))
+	   [java.util Scanner]
+	   [java.util.regex Pattern]))
 
 (def *froth-version* "0.1.0")
 (def *froth-reader* (ref 0))
@@ -38,4 +39,19 @@
   "Reads the definition of a function (upto and not including the ';')"
   (read-definition- []))
     
-    
+
+(defn read-str [delim]
+  "Returns a string, delimited by delim"
+  (let [original-delim (.delimiter @*froth-reader*)]
+    ; skip over leading whitespace
+    (.skip @*froth-reader* #"\s")
+    (.useDelimiter @*froth-reader* (Pattern/quote delim))
+    (let [string (read-word)]
+      (when-not string
+	(throw (Exception. "Unterminated string!")))
+      
+      ; skip over trailing 'delim'
+      (.skip @*froth-reader* (Pattern/quote delim))
+      
+      (.useDelimiter @*froth-reader* original-delim)
+      string)))

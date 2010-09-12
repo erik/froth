@@ -14,6 +14,12 @@
   ([name fn]
      (add-word name fn false)))
 
+(defn remove-word [word]
+  "Removes a word from the dictionary"
+  (if (dictionary word)
+    (dosync (alter dictionary dissoc word))
+    (throw (Exception. (str "word not defined: \"" word "\"")))))
+
 (defn alias-word [new old]
   "Add an alias for a dictionary definition"
   (if-let [word (dictionary old)]

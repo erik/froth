@@ -18,3 +18,7 @@
 (defn peek-stack []
   "Returns the last value on the stack without changing it"
   (dosync (peek @stack)))
+
+(defn clear-stack []
+  "Clears the stack"
+  (dosync (ref-set stack [])))

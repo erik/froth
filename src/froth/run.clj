@@ -21,9 +21,12 @@
   (try
     (evaluate)
     (catch Exception e (println (.getMessage e))))
+  
   (print prompt)
   (flush)
+  
   (dosync
    (ref-set *froth-reader* (Scanner. (read-line))))
+  
   (recur))
   
