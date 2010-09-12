@@ -1,7 +1,7 @@
 (ns froth.core
   (:import [java.io BufferedReader]))
 
-(def *froth-version* "0.0.0")
+(def *froth-version* "0.1.0")
 
 (defn to-number [string]
   "Converts string into an Integer or Float"
