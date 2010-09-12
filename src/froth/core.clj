@@ -1,7 +1,9 @@
 (ns froth.core
-  (:import [java.io BufferedReader]))
+  (:import [java.io BufferedReader]
+	   [java.util Scanner]))
 
 (def *froth-version* "0.1.0")
+(def *froth-reader* (ref 0))
 
 (defn to-number [string]
   "Converts string into an Integer or Float"
@@ -11,19 +13,15 @@
 
 (defn- read-word- [s #^BufferedReader reader]
   "Private function. Ignore me"
-  (let [i (.read reader)]
-	; check for EOF
-    (if (= i -1)
-      s
-      (let [c (str (char i))]
-	(if-not (seq (re-matches #"\s" c))
-	  (read-word- (str s c) reader)
-	  s)))))
+  (let [scanner  @*froth-reader*]
+    (if (.hasNext scanner)
+      (.next scanner)
+      "")))
 
 (defn read-word [#^BufferedReader reader]
   "Reads the next word from reader"
   (let [word (read-word- "" reader)]
-    (if (= "" word)
+    (if (or (empty? word) (seq (re-matches #"\s" word)))
       :EOF
       (try
 	(do (to-number word))
@@ -31,8 +29,8 @@
 
 (defn read-definition- [#^BufferedReader reader words]
   "Private helper to read-definition. Ignore me."
-  (let [word (read-word reader)]
-    (if (= word ";")
+  (let [word (read-word @*froth-reader*)]
+    (if (or (= word ";") (= word :EOF))
       words
       (read-definition- reader (conj words word)))))
 

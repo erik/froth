@@ -1,12 +1,12 @@
 (ns froth.run
   (:use [froth core stack dictionary compile functions])
-  (:import [java.io BufferedReader StringReader]))
+  (:import [java.io BufferedReader StringReader]
+	   [java.util Scanner]))
 
 ;; REPL
 (def prompt "> ")
 
-(dictionary-defaults {:input
-		      (BufferedReader. *in*)}) 
+(dictionary-defaults) 
 
 (println "froth version" *froth-version*)
 (println "Copyright (c) 2010, Erik Price")
@@ -14,10 +14,16 @@
 (print prompt)
 (flush)
 
-(loop [reader (BufferedReader. (StringReader. (read-line)))]
+(dosync
+ (ref-set *froth-reader* (Scanner. (read-line))))
+
+(loop []
   (try
-    (evaluate reader)
+    (evaluate @*froth-reader*)
     (catch Exception e (println (.getMessage e))))
   (print prompt)
   (flush)
-  (recur (BufferedReader. (StringReader. (read-line)))))
+  (dosync
+   (ref-set *froth-reader* (Scanner. (read-line))))
+  (recur))
+  

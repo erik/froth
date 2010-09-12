@@ -2,7 +2,7 @@
   (:use [froth core dictionary stack compile])
   (:import [java.io BufferedReader]))
 
-(defn dictionary-defaults [{:keys [#^BufferedReader input]}]
+(defn dictionary-defaults []
   "Setup some built-in functions"
   (add-word "dup"   #(push-stack (peek-stack)))
   (add-word "+"     #(push-stack (+ (pop-stack) (pop-stack))))
@@ -14,7 +14,7 @@
   (add-word ".S"    #(println @stack))
   (add-word "exit"  #(System/exit 0))
   ; TODO: fixme
-  (add-word ":"     #(let [definition (read-definition input)
+  (add-word ":"     #(let [definition (read-definition @*froth-reader*)
 			   name (first definition)
 			   code (rest definition)]
 		       (add-word name (fn []
@@ -24,4 +24,4 @@
   (alias-word "print-stack" ".S")
 
   ; line comment
-  (add-word "\\"    #(.readLine input) true))
+  (add-word "\\"    #(.readLine @*froth-reader*) true))
