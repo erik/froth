@@ -4,7 +4,7 @@
 	   [java.util.regex Pattern]))
 
 (def *froth-version* "0.2.0")
-(def *froth-reader* (ref 0))
+(def froth-reader (atom 0))
 
 (defn to-number [string]
   "Converts string into an Integer or Float"
@@ -14,7 +14,7 @@
 
 (defn- read-word- []
   "Private function. Ignore me"
-  (let [scanner  @*froth-reader*]
+  (let [scanner  @froth-reader]
     (if (.hasNext scanner)
       (.next scanner)
       "")))
@@ -42,16 +42,16 @@
 
 (defn read-str [delim]
   "Returns a string, delimited by delim"
-  (let [original-delim (.delimiter @*froth-reader*)]
+  (let [original-delim (.delimiter @froth-reader)]
     ; skip over leading whitespace
-    (.skip @*froth-reader* #"\s")
-    (.useDelimiter @*froth-reader* (Pattern/quote delim))
+    (.skip @froth-reader #"\s")
+    (.useDelimiter @froth-reader (Pattern/quote delim))
     (let [string (read-word)]
       (when-not string
 	(throw (Exception. "Unterminated string!")))
       
       ; skip over trailing 'delim'
-      (.skip @*froth-reader* (Pattern/quote delim))
+      (.skip @froth-reader (Pattern/quote delim))
       
-      (.useDelimiter @*froth-reader* original-delim)
+      (.useDelimiter @froth-reader original-delim)
       string)))

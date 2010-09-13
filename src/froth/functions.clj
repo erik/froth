@@ -1,6 +1,6 @@
 (ns froth.functions
   (:use [froth core dictionary stack compile])
-  (:require clojure.contrib.pprint)
+  (:require clojure.pprint)
   (:import [java.io BufferedReader]))
 
 (defn dictionary-defaults []
@@ -15,7 +15,7 @@
   (add-word "<"     #(push-stack (> (pop-stack) (pop-stack))))
   (add-word "="     #(push-stack (= (pop-stack) (pop-stack))))  
   (add-word "."     #(println (pop-stack)))
-  (add-word ".S"    #(clojure.contrib.pprint/pprint @stack))
+  (add-word ".S"    #(clojure.pprint/pprint @stack))
   (add-word "0SP"   #(clear-stack))
   (add-word "exit"  #(System/exit 0))
   (add-word ":"     #(let [definition (read-definition)
@@ -42,6 +42,6 @@
   (alias-word "true?" "?")
 
   ; line comment
-  (add-word "\\"    #(.readLine @*froth-reader*) true)
+  (add-word "\\"    #(.readLine @froth-reader) true)
   ; inline comment
   (add-word "("     #(read-str ")") true))

@@ -14,8 +14,7 @@
 (print prompt)
 (flush)
 
-(dosync
- (ref-set *froth-reader* (Scanner. (read-line))))
+(swap! froth-reader (constantly (Scanner. (read-line))))
 
 (loop []
   (try
@@ -25,8 +24,7 @@
   (print prompt)
   (flush)
   
-  (dosync
-   (ref-set *froth-reader* (Scanner. (read-line))))
+  (swap! froth-reader (constantly (Scanner. (read-line))))
   
   (recur))
   
