@@ -1,1 +1,1 @@
-java -cp lib/*:src/ clojure.main -e "(use 'froth.run)"
+java -cp lib/*:src/ clojure.main src/froth/run.clj "$@"
